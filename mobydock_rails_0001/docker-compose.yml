@@ -1,0 +1,41 @@
+postgres:
+  image: postgres:9.6.5
+  environment:
+    POSTGRES_USER: mobydock
+    POSTGRES_PASSWORD: yourpassword
+  ports:
+    - '5432:5432'
+# 5432 :> port for the docker host on the  left
+# 5432 :> port for the container on the  right
+  volumes:
+    - ~/.docker-volumes/mobydock/postgresql/data:/var/lib/postgresql/data
+# path on the left is the path on the workstation
+# path on the right is the path in the container
+# whatever is on the left will be injected into the container path on the right
+
+redis:
+#  image: redis:2.8.22
+  image: redis:3.2.10
+  ports:
+    - '6379:6379'
+# 6379 :> port for the docker host on the  left
+# 6379 :> port for the container on the  right
+  volumes:
+#    - ~/.docker-volumes/mobydock/redis/data:/var/lib/redis/data
+     - ~/.docker-volumes/mobydock/redis/data:/data
+
+mobydock:
+  build: .
+  links:
+    - postgres
+    - redis
+  volumes:
+    - .:/mobydock
+  # this is needed for development mode
+  # allows for live code updates without having to rebuild the docker container
+
+  ports:
+    - '8000:8000'
+  env_file:
+    - .mobydock.env
+  # environment file that contains secrets

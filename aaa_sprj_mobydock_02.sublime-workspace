@@ -1,0 +1,449 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "mobydock/Dockerfile",
+			"settings":
+			{
+				"buffer_size": 2176,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "vbin/sqn.sh",
+			"settings":
+			{
+				"buffer_size": 4692,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy/deploy.sh",
+			"settings":
+			{
+				"buffer_size": 5449,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0002/deploy.sh",
+			"settings":
+			{
+				"buffer_size": 5930,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0003/deploy.sh",
+			"settings":
+			{
+				"buffer_size": 6787,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0003/git/post-receive/mobydock",
+			"settings":
+			{
+				"buffer_size": 750,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "mobydock/docker-compose.yml",
+			"settings":
+			{
+				"buffer_size": 653,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/home/ralph/Projects/MobyDock/mobydock",
+		"/home/ralph/Projects/MobyDock/mobydock/config",
+		"/home/ralph/Projects/MobyDock/mobydock/instance",
+		"/home/ralph/Projects/MobyDock/mobydock/mobydock",
+		"/home/ralph/Projects/MobyDock/deploy",
+		"/home/ralph/Projects/MobyDock/deploy/ssh",
+		"/home/ralph/Projects/MobyDock/deploy/sudo",
+		"/home/ralph/Projects/MobyDock/deploy_0002",
+		"/home/ralph/Projects/MobyDock/deploy_0003",
+		"/home/ralph/Projects/MobyDock/deploy_0003/git",
+		"/home/ralph/Projects/MobyDock/deploy_0003/git/post-receive",
+		"/home/ralph/Projects/MobyDock/vbin"
+	],
+	"file_history":
+	[
+		"/home/ralph/Projects/MobyDock/mobydock/config/database.yml",
+		"/home/ralph/Projects/MobyDock/mobydock/config.ru",
+		"/home/ralph/Projects/MobyDock/mobydock/config/unicorn.rb",
+		"/home/ralph/Projects/MobyDock/mobydock/Gemfile",
+		"/home/ralph/Projects/MobyDock/mobydock/zzz_notes_01.txt",
+		"/home/ralph/Projects/MobyDock/mobydock/folder_struct.txt",
+		"/usr/local/bin/scaffolding_01.sh"
+	],
+	"find":
+	{
+		"height": 0.0
+	},
+	"find_in_files":
+	{
+		"height": 0.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 5,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "mobydock/Dockerfile",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2176,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "vbin/sqn.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 4692,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1379,
+								1379
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "deploy/deploy.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5449,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2413,
+								2413
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1305.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "deploy_0002/deploy.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5930,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3582,
+								3582
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1440.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "deploy_0003/deploy.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 6787,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3497,
+								3497
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1755.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "deploy_0003/git/post-receive/mobydock",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 750,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								268,
+								268
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "mobydock/docker-compose.yml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 653,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/YAML/YAML.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "aaa_sprj_mobydock_02.sublime-project",
+	"replace":
+	{
+		"height": 0.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 188.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
