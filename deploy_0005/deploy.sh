@@ -1,13 +1,16 @@
 #!/bin/bash
 
 
-#SERVER_IP="${SERVER_IP:-192.168.1.99}"
+# SERVER_IP="${SERVER_IP:-192.168.1.99}"
 SERVER_IP="${SERVER_IP:-192.168.11.99}"
+# SERVER_IP="${SERVER_IP:-192.168.11.139}"
 SSH_USER="${SSH_USER:-$(whoami)}"
 KEY_USER="${KEY_USER:-$(whoami)}"
-DOCKER_VERSION="${DOCKER_VERSION:-1.8.3}"
+#DOCKER_VERSION="${DOCKER_VERSION:-1.8.3}"
+DOCKER_VERSION="${DOCKER_VERSION:-17.05.0}"
 
-DOCKER_PULL_IMAGES=("postgres:9.4.5" "redis:2.8.22")
+# DOCKER_PULL_IMAGES=("postgres:9.4.5" "redis:2.8.22")
+DOCKER_PULL_IMAGES=("postgres:9.6.5" "redis:4.0.1")
 
 
 function preseed_staging() {
@@ -48,7 +51,6 @@ sudo mv /tmp/sudoers /etc
   '"
   echo "done!"
 }
-
 
 function add_ssh_key() {
   echo "Adding SSH key..."
@@ -97,6 +99,34 @@ function docker_pull () {
   echo "done!"
 }
 
+function git_init () {
+  echo "Initialize git repo and hooks..."
+#  scp "git/post-receive/mobydock" "${SSH_USER}@${SERVER_IP}:/tmp/mobydock"
+  scp "git/post-receive/mobydock_02" "${SSH_USER}@${SERVER_IP}:/tmp/mobydock"
+  ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'
+sudo apt-get update && sudo apt-get install -y -q git
+sudo rm -rf /var/git/mobydock.git /var/git/mobydock
+sudo mkdir -p /var/git/mobydock.git /var/git/mobydock
+sudo git --git-dir=/var/git/mobydock.git --bare init
+
+sudo mv /tmp/mobydock /var/git/mobydock.git/hooks/post-receive
+sudo chmod +x /var/git/mobydock.git/hooks/post-receive
+sudo chown ${SSH_USER}:${SSH_USER} -R /var/git/mobydock.git /var/git/mobydock
+  '"
+  echo "done!"
+}
+
+function configure_firewall () {
+  echo "Configuring iptables firewall..."
+  scp "iptables/rules-save" "${SSH_USER}@${SERVER_IP}:/tmp/rules-save"
+  ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'
+sudo mkdir -p /var/lib/iptables
+sudo mv /tmp/rules-save /var/lib/iptables
+sudo chown root:root -R /var/lib/iptables
+  '"
+  echo "done!"
+}
+
 function provision_server () {
   configure_sudo
   echo "---"
@@ -109,43 +139,14 @@ function provision_server () {
   docker_pull
   echo "---"
   git_init
+  echo "---"
+  configure_firewall
 }
 
-function test_xecho () {
-  echo "test_xecho..."
-  ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'
-  echo \"--- sudo apt-get update && sudo apt-get install -y -q git\"
-  echo \"--- DONE\"
-  '"
-}
-
-function git_init () {
-  echo "Initialize git repo and hooks..."
-  scp "git/post-receive/mobydock" "${SSH_USER}@${SERVER_IP}:/tmp/mobydock"
-  ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'
-echo \"--- sudo apt-get update && sudo apt-get install -y -q git\"
-sudo apt-get update && sudo apt-get install -y -q git
-echo \"--- sudo rm -rf /var/git/mobydock.git /var/git/mobydock\"
-sudo rm -rf /var/git/mobydock.git /var/git/mobydock
-echo \"--- sudo mkdir -p /var/git/mobydock.git /var/git/mobydock\"
-sudo mkdir -p /var/git/mobydock.git /var/git/mobydock
-echo \"--- sudo git --git-dir=/var/git/mobydock.git --bare init\"
-sudo git --git-dir=/var/git/mobydock.git --bare init
-
-echo \"--- sudo mv /tmp/mobydock /var/git/mobydock.git/hooks/post-receive\"
-sudo mv /tmp/mobydock /var/git/mobydock.git/hooks/post-receive
-echo \"--- sudo chmod +x /var/git/mobydock.git/hooks/post-receive\"
-sudo chmod +x /var/git/mobydock.git/hooks/post-receive
-echo \"--- sudo chown ${SSH_USER}:${SSH_USER} -R /var/git/mobydock.git /var/git/mobydock\"
-sudo chown ${SSH_USER}:${SSH_USER} -R /var/git/mobydock.git /var/git/mobydock
-echo \"--- DONE\"
-  '"
-  echo "done!"
-}
 
 function help_menu () {
 cat << EOF
-Usage: ${0} (-h | -S | -u | -k | -s | -d [docker_ver] | -l | -g | -a [docker_ver])
+Usage: ${0} (-h | -S | -u | -k | -s | -d [docker_ver] | -l | -g | -f | -a [docker_ver])
 
 ENVIRONMENT VARIABLES:
    SERVER_IP        IP address to work on, ie. staging or production
@@ -169,6 +170,7 @@ OPTIONS:
    -d|--docker               Install Docker
    -l|--docker-pull          Pull necessary Docker images
    -g|--git-init             Install and initialize git
+   -f|--firewall             Configure the iptables firewall
    -a|--all                  Provision everything except preseeding
 
 EXAMPLES:
@@ -193,6 +195,9 @@ EXAMPLES:
    Install and initialize git:
         $ deploy -g
 
+   Configure the iptables firewall:
+        $ deploy -f
+
    Configure everything together:
         $ deploy -a
 
@@ -205,10 +210,6 @@ EOF
 while [[ $# > 0 ]]
 do
 case "${1}" in
-  -z|--test_xecho)
-  test_xecho
-  shift
-  ;;
   -S|--preseed-staging)
   preseed_staging
   shift
@@ -235,6 +236,10 @@ case "${1}" in
   ;;
   -g|--git-init)
   git_init
+  shift
+  ;;
+  -f|--firewall)
+  configure_firewall
   shift
   ;;
   -a|--all)
