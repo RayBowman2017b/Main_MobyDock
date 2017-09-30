@@ -50,10 +50,11 @@
 			}
 		},
 		{
-			"file": "deploy_0005/git/post-receive/mobydock",
+			"file": "deploy_0005/deploy.sh",
 			"settings":
 			{
-				"buffer_size": 750,
+				"buffer_size": 6369,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -302,27 +303,29 @@
 				},
 				{
 					"buffer": 5,
-					"file": "deploy_0005/git/post-receive/mobydock",
-					"semi_transient": true,
+					"file": "deploy_0005/deploy.sh",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 750,
+						"buffer_size": 6369,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								572,
-								572
+								2903,
+								2903
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1395.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
