@@ -59,10 +59,10 @@
 			}
 		},
 		{
-			"file": "deploy_0006/units/iptables-restore.service",
+			"file": "deploy_0006/deploy.sh",
 			"settings":
 			{
-				"buffer_size": 218,
+				"buffer_size": 7661,
 				"line_ending": "Unix"
 			}
 		},
@@ -110,8 +110,10 @@
 		"/home/ralph/Projects/MobyDock/mobydock",
 		"/home/ralph/Projects/MobyDock/mobydock/config",
 		"/home/ralph/Projects/MobyDock/mobydock/mobydock",
-		"/home/ralph/Projects/MobyDock/deploy",
 		"/home/ralph/Projects/MobyDock/deploy_0006",
+		"/home/ralph/Projects/MobyDock/deploy_0006/git",
+		"/home/ralph/Projects/MobyDock/deploy_0006/git/post-receive",
+		"/home/ralph/Projects/MobyDock/deploy_0006/iptables",
 		"/home/ralph/Projects/MobyDock/deploy_0006/units"
 	],
 	"file_history":
@@ -339,27 +341,29 @@
 				},
 				{
 					"buffer": 6,
-					"file": "deploy_0006/units/iptables-restore.service",
-					"semi_transient": true,
+					"file": "deploy_0006/deploy.sh",
+					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 218,
+						"buffer_size": 7661,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								4014,
+								4014
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1815.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -475,7 +479,7 @@
 	"show_open_files": false,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 188.0,
+	"side_bar_width": 220.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

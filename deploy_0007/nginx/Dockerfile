@@ -1,4 +1,5 @@
-FROM nginx:1.9
+#FROM nginx:1.9
+FROM nginx:1.13.5
 MAINTAINER Nick Janetakis <nick.janetakis@gmail.com>
 
 RUN rm /usr/share/nginx/html/*
