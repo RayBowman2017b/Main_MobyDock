@@ -25,44 +25,67 @@
 			}
 		},
 		{
-			"file": "deploy_0002/deploy.sh",
+			"file": "deploy_0007/nginx/Dockerfile",
 			"settings":
 			{
-				"buffer_size": 5930,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "deploy_0003/deploy.sh",
-			"settings":
-			{
-				"buffer_size": 6787,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "deploy_0004/deploy.sh",
-			"settings":
-			{
-				"buffer_size": 6362,
+				"buffer_size": 546,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "deploy_0005/deploy.sh",
+			"file": "deploy_0008/units/mobydock.service",
 			"settings":
 			{
-				"buffer_size": 6369,
+				"buffer_size": 618,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "deploy_0006/deploy.sh",
+			"file": "deploy_0007/nginx/docker-entrypoint",
 			"settings":
 			{
-				"buffer_size": 7661,
+				"buffer_size": 478,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0008/git/post-receive/mobydock_02",
+			"settings":
+			{
+				"buffer_size": 1277,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "#!/bin/bash\n\n# ----------------------------------------\n\nAPP_ENV=\"${APP_ENV:-staging}\"\n# SERVER_IP=\"${SERVER_IP:-192.168.1.99}\"\nSERVER_IP=\"${SERVER_IP:-192.168.11.99}\"\n# SERVER_IP=\"${SERVER_IP:-192.168.11.139}\"\nSSH_USER=\"${SSH_USER:-$(whoami)}\"\nKEY_USER=\"${KEY_USER:-$(whoami)}\"\n#DOCKER_VERSION=\"${DOCKER_VERSION:-1.8.3}\"\nDOCKER_VERSION=\"${DOCKER_VERSION:-17.05.0}\"\n\n# DOCKER_PULL_IMAGES=(\"postgres:9.4.5\" \"redis:2.8.22\")\nDOCKER_PULL_IMAGES=(\"postgres:9.6.5\" \"redis:4.0.1\")\n\n# COPY_UNIT_FILES=(\"iptables-restore\" \"swap\" \"postgres\" \"redis\")\nCOPY_UNIT_FILES=(\"iptables-restore\" \"swap\" \"postgres\" \"redis\" \"mobydock\" \"nginx\")\nSSL_CERT_BASE_NAME=\"productionexample\"\n\n# ----------------------------------------\n\nfunction preseed_staging() {\ncat << EOF\nSTAGING SERVER (DIRECT VIRTUAL MACHINE) DIRECTIONS:\n  1. Configure a static IP address directly on the VM\n     su\n     <enter password>\n     nano /etc/network/interfaces\n     [change the last line to look like this, remember to set the correct\n      gateway for your router's IP address if it's not 192.168.1.1]\niface eth0 inet static\n  address ${SERVER_IP}\n  netmask 255.255.255.0\n  gateway 192.168.1.1\n\n  2. Reboot the VM and ensure the Debian CD is mounted\n\n  3. Install sudo\n     apt-get update && apt-get install -y -q sudo\n\n  4. Add the user to the sudo group\n     adduser ${SSH_USER} sudo\n\n  5. Run the commands in: $0 --help\n     Example:\n       ./deploy.sh -a\nEOF\n}\n\nfunction configure_sudo () {\n  echo \"Configuring passwordless sudo...\"\n  scp \"sudo/sudoers\" \"${SSH_USER}@${SERVER_IP}:/tmp/sudoers\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo chmod 440 /tmp/sudoers\nsudo chown root:root /tmp/sudoers\nsudo mv /tmp/sudoers /etc\n  '\"\n  echo \"done!\"\n}\n\nfunction add_ssh_key() {\n  echo \"Adding SSH key...\"\n  cat \"$HOME/.ssh/id_rsa.pub\" | ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nmkdir /home/${KEY_USER}/.ssh\ncat >> /home/${KEY_USER}/.ssh/authorized_keys\n    '\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nchmod 700 /home/${KEY_USER}/.ssh\nchmod 640 /home/${KEY_USER}/.ssh/authorized_keys\nsudo chown ${KEY_USER}:${KEY_USER} -R /home/${KEY_USER}/.ssh\n  '\"\n  echo \"done!\"\n}\n\nfunction configure_secure_ssh () {\n  echo \"Configuring secure SSH...\"\n  scp \"ssh/sshd_config\" \"${SSH_USER}@${SERVER_IP}:/tmp/sshd_config\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo chown root:root /tmp/sshd_config\nsudo mv /tmp/sshd_config /etc/ssh\nsudo systemctl restart ssh\n  '\"\n  echo \"done!\"\n}\n\nfunction install_docker () {\n  echo \"Configuring Docker v${1}...\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo apt-get update\nsudo apt-get install -y -q libapparmor1 aufs-tools ca-certificates\nwget -O \"docker.deb https://apt.dockerproject.org/repo/pool/main/d/docker-engine/docker-engine_${1}-0~jessie_amd64.deb\"\nsudo dpkg -i docker.deb\nrm docker.deb\nsudo usermod -aG docker \"${KEY_USER}\"\n  '\"\n  echo \"done!\"\n}\n\nfunction docker_pull () {\n  echo \"Pulling Docker images...\"\n  for image in \"${DOCKER_PULL_IMAGES[@]}\"\n  do\n    ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'docker pull ${image}'\"\n  done\n  echo \"done!\"\n}\n\nfunction git_init () {\n  echo \"Initialize git repo and hooks...\"\n  scp \"git/post-receive/mobydock\" \"${SSH_USER}@${SERVER_IP}:/tmp/mobydock\"\n  scp \"git/post-receive/nginx\" \"${SSH_USER}@${SERVER_IP}:/tmp/nginx\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo apt-get update && sudo apt-get install -y -q git\nsudo rm -rf /var/git/mobydock.git /var/git/mobydock /var/git/nginx.git /var/git/nginx\nsudo mkdir -p /var/git/mobydock.git /var/git/mobydock /var/git/nginx.git /var/git/nginx\nsudo git --git-dir=/var/git/mobydock.git --bare init\nsudo git --git-dir=/var/git/nginx.git --bare init\n\nsudo mv /tmp/mobydock /var/git/mobydock.git/hooks/post-receive\nsudo mv /tmp/nginx /var/git/nginx.git/hooks/post-receive\nsudo chmod +x /var/git/mobydock.git/hooks/post-receive /var/git/nginx.git/hooks/post-receive\nsudo chown ${SSH_USER}:${SSH_USER} -R /var/git/mobydock.git /var/git/mobydock.git /var/git/mobydock /var/git/nginx.git /var/git/nginx\n  '\"\n  echo \"done!\"\n}\n\nfunction configure_firewall () {\n  echo \"Configuring iptables firewall...\"\n  scp \"iptables/rules-save\" \"${SSH_USER}@${SERVER_IP}:/tmp/rules-save\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo mkdir -p /var/lib/iptables\nsudo mv /tmp/rules-save /var/lib/iptables\nsudo chown root:root -R /var/lib/iptables\n  '\"\n  echo \"done!\"\n}\n\nfunction copy_units () {\n  echo \"Copying systemd unit files...\"\n  for unit in \"${COPY_UNIT_FILES[@]}\"\n  do\n    scp \"units/${unit}.service\" \"${SSH_USER}@${SERVER_IP}:/tmp/${unit}.service\"\n    ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo mv /tmp/${unit}.service /etc/systemd/system\nsudo chown ${SSH_USER}:${SSH_USER} /etc/systemd/system/${unit}.service\n  '\"\n  done\n  echo \"done!\"\n}\n\nfunction enable_base_units () {\n  echo \"Enabling base systemd units...\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo systemctl enable iptables-restore.service\nsudo systemctl start iptables-restore.service\nsudo systemctl enable swap.service\nsudo systemctl start swap.service\nsudo systemctl enable postgres.service\nsudo systemctl start postgres.service\nsudo systemctl enable redis.service\nsudo systemctl start redis.service\n  '\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'sudo systemctl restart docker'\"\n  echo \"done!\"\n}\n\nfunction copy_env_config_files () {\n  echo \"Copying environment/config files...\"\n  scp \"${APP_ENV}/__init__.py\" \"${SSH_USER}@${SERVER_IP}:/tmp/__init__.py\"\n  scp \"${APP_ENV}/settings.py\" \"${SSH_USER}@${SERVER_IP}:/tmp/settings.py\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo mkdir -p /home/${SSH_USER}/config\nsudo mv /tmp/__init__.py /home/${SSH_USER}/config/__init__.py\nsudo mv /tmp/settings.py /home/${SSH_USER}/config/settings.py\nsudo chown ${SSH_USER}:${SSH_USER} -R /home/${SSH_USER}/config\n  '\"\n  echo \"done!\"\n}\n\nfunction copy_ssl_certs () {\n  echo \"Copying SSL certificates...\"\nif [[ \"${APP_ENV}\" == \"staging\" ]]; then\n  scp \"nginx/certs/${SSL_CERT_BASE_NAME}.crt\" \"${SSH_USER}@${SERVER_IP}:/tmp/${SSL_CERT_BASE_NAME}.crt\"\n  scp \"nginx/certs/${SSL_CERT_BASE_NAME}.key\" \"${SSH_USER}@${SERVER_IP}:/tmp/${SSL_CERT_BASE_NAME}.key\"\n  scp \"nginx/certs/dhparam.pem\" \"${SSH_USER}@${SERVER_IP}:/tmp/dhparam.pem\"\nelse\n  scp \"production/certs/${SSL_CERT_BASE_NAME}.crt\" \"${SSH_USER}@${SERVER_IP}:/tmp/${SSL_CERT_BASE_NAME}.crt\"\n  scp \"production/certs/${SSL_CERT_BASE_NAME}.key\" \"${SSH_USER}@${SERVER_IP}:/tmp/${SSL_CERT_BASE_NAME}.key\"\n  scp \"production/certs/dhparam.pem\" \"${SSH_USER}@${SERVER_IP}:/tmp/dhparam.pem\"\nfi\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo mv /tmp/${SSL_CERT_BASE_NAME}.crt /etc/ssl/certs/${SSL_CERT_BASE_NAME}.crt\nsudo mv /tmp/${SSL_CERT_BASE_NAME}.key /etc/ssl/private/${SSL_CERT_BASE_NAME}.key\nsudo mv /tmp/dhparam.pem /etc/ssl/private/dhparam.pem\nsudo chown root:root -R /etc/ssl\n  '\"\n  echo \"done!\"\n}\n\nfunction run_application () {\n  echo \"Running the application...\"\n  ssh -t \"${SSH_USER}@${SERVER_IP}\" bash -c \"'\nsudo systemctl enable mobydock.service nginx.service\nsudo systemctl start mobydock.service nginx.service\n  '\"\n  echo \"done!\"\n}\n\nfunction provision_server () {\n  configure_sudo\n  echo \"---\"\n  add_ssh_key\n  echo \"---\"\n  configure_secure_ssh\n  echo \"---\"\n  install_docker ${1}\n  echo \"---\"\n  docker_pull\n  echo \"---\"\n  git_init\n  echo \"---\"\n  configure_firewall\n  echo \"---\"\n  copy_units\n  echo \"---\"\n  enable_base_units\n  echo \"---\"\n  copy_env_config_files\n  echo \"---\"\n  copy_ssl_certs\n}\n\n\nfunction help_menu () {\ncat << EOF\nUsage: ${0} (-h | -S | -u | -k | -s | -d [docker_ver] | -l | -g | -f | -c | -b | -e | -x | -r | -a [docker_ver])\n\nENVIRONMENT VARIABLES:\n   APP_ENV          Environment that is being deployed to, 'staging' or 'production'\n                    Defaulting to ${APP_ENV}\n\n   SERVER_IP        IP address to work on, ie. staging or production\n                    Defaulting to ${SERVER_IP}\n\n   SSH_USER         User account to ssh and scp in as\n                    Defaulting to ${SSH_USER}\n\n   KEY_USER         User account linked to the SSH key\n                    Defaulting to ${KEY_USER}\n\n   DOCKER_VERSION   Docker version to install\n                    Defaulting to ${DOCKER_VERSION}\n\nOPTIONS:\n   -h|--help                 Show this message\n   -S|--preseed-staging      Preseed intructions for the staging server\n   -u|--sudo                 Configure passwordless sudo\n   -k|--ssh-key              Add SSH key\n   -s|--ssh                  Configure secure SSH\n   -d|--docker               Install Docker\n   -l|--docker-pull          Pull necessary Docker images\n   -g|--git-init             Install and initialize git\n   -f|--firewall             Configure the iptables firewall\n   -c|--copy-units           Copy systemd unit files\n   -b|--enable-base-units    Enable base systemd unit files\n   -e|--copy--environment    Copy app environment/config files\n   -x|--ssl-certs            Copy SSL certificates\n   -r|--run-app              Run the application\n   -a|--all                  Provision everything except preseeding\n\nEXAMPLES:\n   Configure passwordless sudo:\n        $ deploy -u\n\n   Add SSH key:\n        $ deploy -k\n\n   Configure secure SSH:\n        $ deploy -s\n\n   Install Docker v${DOCKER_VERSION}:\n        $ deploy -d\n\n   Install custom Docker version:\n        $ deploy -d 1.8.1\n\n   Pull necessary Docker images:\n        $ deploy -l\n\n   Install and initialize git:\n        $ deploy -g\n\n   Configure the iptables firewall:\n        $ deploy -f\n\n   Copy systemd unit files:\n        $ deploy -c\n\n   Enable base systemd unit files:\n        $ deploy -b\n\n   Copy app environment/config files:\n        $ deploy -e\n\n   Copy SSL certificates:\n        $ deploy -x\n\n   Run the application:\n        $ deploy -r\n\n   Configure everything together:\n        $ deploy -a\n\n   Configure everything together with a custom Docker version:\n        $ deploy -a 1.8.1\nEOF\n}\n\n\nwhile [[ $# > 0 ]]\ndo\ncase \"${1}\" in\n  -S|--preseed-staging)\n  preseed_staging\n  shift\n  ;;\n  -u|--sudo)\n  configure_sudo\n  shift\n  ;;\n  -k|--ssh-key)\n  add_ssh_key\n  shift\n  ;;\n  -s|--ssh)\n  configure_secure_ssh\n  shift\n  ;;\n  -d|--docker)\n  install_docker \"${2:-${DOCKER_VERSION}}\"\n  shift\n  ;;\n  -l|--docker-pull)\n  docker_pull\n  shift\n  ;;\n  -g|--git-init)\n  git_init\n  shift\n  ;;\n  -f|--firewall)\n  configure_firewall\n  shift\n  ;;\n  -c|--copy-units)\n  copy_units\n  shift\n  ;;\n  -b|--enable-base-units)\n  enable_base_units\n  shift\n  ;;\n  -e|--copy--environment)\n  copy_env_config_files\n  shift\n  ;;\n  -x|--ssl-certs)\n  copy_ssl_certs\n  shift\n  ;;\n  -r|--run-app)\n  run_application\n  shift\n  ;;\n  -a|--all)\n  provision_server \"${2:-${DOCKER_VERSION}}\"\n  shift\n  ;;\n  -h|--help)\n  help_menu\n  shift\n  ;;\n  *)\n  echo \"${1} is not a valid flag, try running: ${0} --help\"\n  ;;\nesac\nshift\ndone\n",
+			"file": "deploy_0007/deploy.sh",
+			"file_size": 10621,
+			"file_write_time": 131513650238842729,
+			"settings":
+			{
+				"buffer_size": 10708,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0008/deploy.sh",
+			"settings":
+			{
+				"buffer_size": 10709,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0007/nginx/configs/default.conf",
+			"settings":
+			{
+				"buffer_size": 3020,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
@@ -108,16 +131,25 @@
 	"expanded_folders":
 	[
 		"/home/ralph/Projects/MobyDock/mobydock",
-		"/home/ralph/Projects/MobyDock/mobydock/config",
-		"/home/ralph/Projects/MobyDock/mobydock/mobydock",
-		"/home/ralph/Projects/MobyDock/deploy_0006",
-		"/home/ralph/Projects/MobyDock/deploy_0006/git",
-		"/home/ralph/Projects/MobyDock/deploy_0006/git/post-receive",
-		"/home/ralph/Projects/MobyDock/deploy_0006/iptables",
-		"/home/ralph/Projects/MobyDock/deploy_0006/units"
+		"/home/ralph/Projects/MobyDock/deploy",
+		"/home/ralph/Projects/MobyDock/deploy_0004",
+		"/home/ralph/Projects/MobyDock/deploy_0004/git",
+		"/home/ralph/Projects/MobyDock/deploy_0004/git/post-receive",
+		"/home/ralph/Projects/MobyDock/deploy_0007",
+		"/home/ralph/Projects/MobyDock/deploy_0007/git",
+		"/home/ralph/Projects/MobyDock/deploy_0007/git/post-receive",
+		"/home/ralph/Projects/MobyDock/deploy_0008",
+		"/home/ralph/Projects/MobyDock/deploy_0008/git",
+		"/home/ralph/Projects/MobyDock/deploy_0008/git/post-receive",
+		"/home/ralph/Projects/MobyDock/deploy_0008/units"
 	],
 	"file_history":
 	[
+		"/home/ralph/Projects/MobyDock/deploy_0002/deploy.sh",
+		"/home/ralph/Projects/MobyDock/deploy_0003/deploy.sh",
+		"/home/ralph/Projects/MobyDock/deploy_0004/deploy.sh",
+		"/home/ralph/Projects/MobyDock/deploy_0005/deploy.sh",
+		"/home/ralph/Projects/MobyDock/deploy_0006/deploy.sh",
 		"/home/ralph/Projects/MobyDock/deploy/deploy.sh",
 		"/home/ralph/Projects/MobyDock/mobydock/config/database.yml",
 		"/home/ralph/Projects/MobyDock/mobydock/config.ru",
@@ -160,7 +192,7 @@
 	"groups":
 	[
 		{
-			"selected": 6,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -188,7 +220,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -216,34 +248,32 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
 					"buffer": 2,
-					"file": "deploy_0002/deploy.sh",
+					"file": "deploy_0007/nginx/Dockerfile",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 5930,
+						"buffer_size": 546,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3582,
-								3582
+								165,
+								165
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1440.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 5,
@@ -251,29 +281,27 @@
 				},
 				{
 					"buffer": 3,
-					"file": "deploy_0003/deploy.sh",
+					"file": "deploy_0008/units/mobydock.service",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6787,
+						"buffer_size": 618,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3497,
-								3497
+								250,
+								250
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1755.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 4,
@@ -281,19 +309,75 @@
 				},
 				{
 					"buffer": 4,
-					"file": "deploy_0004/deploy.sh",
+					"file": "deploy_0007/nginx/docker-entrypoint",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 6362,
+						"buffer_size": 478,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								54,
-								54
+								185,
+								185
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "deploy_0008/git/post-receive/mobydock_02",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1277,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1220,
+								1220
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 82.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "deploy_0007/deploy.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10708,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								735,
+								735
 							]
 						],
 						"settings":
@@ -306,54 +390,24 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "deploy_0005/deploy.sh",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 6369,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2903,
-								2903
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1545.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 1,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "deploy_0006/deploy.sh",
+					"buffer": 7,
+					"file": "deploy_0008/deploy.sh",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 7661,
+						"buffer_size": 10709,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4014,
-								4014
+								662,
+								662
 							]
 						],
 						"settings":
@@ -363,14 +417,44 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 1815.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
 					"type": "text"
 				},
 				{
-					"buffer": 7,
+					"buffer": 8,
+					"file": "deploy_0007/nginx/configs/default.conf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3020,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2128,
+								2128
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 435.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
 					"file": "mobydock/docker-compose.yml",
 					"semi_transient": false,
 					"settings":
@@ -396,7 +480,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 9,
 					"type": "text"
 				}
 			]
