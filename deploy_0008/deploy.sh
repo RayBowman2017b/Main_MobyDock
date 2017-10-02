@@ -1,16 +1,25 @@
 #!/bin/bash
 
 
+# ----------------------------------------
+
 APP_ENV="${APP_ENV:-staging}"
-SERVER_IP="${SERVER_IP:-192.168.1.99}"
+# SERVER_IP="${SERVER_IP:-192.168.1.99}"
+SERVER_IP="${SERVER_IP:-192.168.11.99}"
+# SERVER_IP="${SERVER_IP:-192.168.11.139}"
 SSH_USER="${SSH_USER:-$(whoami)}"
 KEY_USER="${KEY_USER:-$(whoami)}"
-DOCKER_VERSION="${DOCKER_VERSION:-1.8.3}"
+#DOCKER_VERSION="${DOCKER_VERSION:-1.8.3}"
+DOCKER_VERSION="${DOCKER_VERSION:-17.05.0}"
 
-DOCKER_PULL_IMAGES=("postgres:9.4.5" "redis:2.8.22")
+# DOCKER_PULL_IMAGES=("postgres:9.4.5" "redis:2.8.22")
+DOCKER_PULL_IMAGES=("postgres:9.6.5" "redis:4.0.1")
+
+# COPY_UNIT_FILES=("iptables-restore" "swap" "postgres" "redis")
 COPY_UNIT_FILES=("iptables-restore" "swap" "postgres" "redis" "mobydock" "nginx")
 SSL_CERT_BASE_NAME="productionexample"
 
+# ----------------------------------------
 
 function preseed_staging() {
 cat << EOF

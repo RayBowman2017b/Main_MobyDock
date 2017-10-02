@@ -3,14 +3,17 @@ Description=Run %p
 Requires=docker.service postgres.service redis.service
 After=docker.service postgres.service redis.service
 
+# CHANGE :>  User=nick
+# CHANGE :>  -v /home/nick/instance:/mobydock/instance \
+
 [Service]
 Restart=always
-User=nick
+User=ralph
 ExecStartPre=-/usr/bin/docker kill %p
 ExecStartPre=-/usr/bin/docker rm -f %p
 ExecStart=/usr/bin/docker run -t --rm --name %p \
   --link redis:redis --link postgres:postgres \
-  -v /home/nick/instance:/mobydock/instance \
+  -v /home/ralph/instance:/mobydock/instance \
   -p 8000:8000 %p
 ExecStartPost=-/usr/bin/docker stop nginx
 ExecStop=/usr/bin/docker stop %p
