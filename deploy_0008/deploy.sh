@@ -108,10 +108,11 @@ function docker_pull () {
 }
 
 #  scp "git/post-receive/mobydock" "${SSH_USER}@${SERVER_IP}:/tmp/mobydock"
+#  scp "git/post-receive/mobydock_02" "${SSH_USER}@${SERVER_IP}:/tmp/mobydock"
 
 function git_init () {
   echo "Initialize git repo and hooks..."
-  scp "git/post-receive/mobydock_02" "${SSH_USER}@${SERVER_IP}:/tmp/mobydock"
+  scp "git/post-receive/mobydock" "${SSH_USER}@${SERVER_IP}:/tmp/mobydock"
   scp "git/post-receive/nginx" "${SSH_USER}@${SERVER_IP}:/tmp/nginx"
   ssh -t "${SSH_USER}@${SERVER_IP}" bash -c "'
 sudo apt-get update && sudo apt-get install -y -q git

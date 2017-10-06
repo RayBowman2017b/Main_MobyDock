@@ -75,7 +75,33 @@
 			"file": "deploy_0008/deploy.sh",
 			"settings":
 			{
-				"buffer_size": 10709,
+				"buffer_size": 10789,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0003/deploy.sh",
+			"settings":
+			{
+				"buffer_size": 6787,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0008/nginx/docker-entrypoint",
+			"settings":
+			{
+				"buffer_size": 477,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "deploy_0008/nginx/configs/default.conf",
+			"settings":
+			{
+				"buffer_size": 2986,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -132,19 +158,23 @@
 	[
 		"/home/ralph/Projects/MobyDock/mobydock",
 		"/home/ralph/Projects/MobyDock/deploy",
-		"/home/ralph/Projects/MobyDock/deploy_0004",
-		"/home/ralph/Projects/MobyDock/deploy_0004/git",
-		"/home/ralph/Projects/MobyDock/deploy_0004/git/post-receive",
-		"/home/ralph/Projects/MobyDock/deploy_0007",
-		"/home/ralph/Projects/MobyDock/deploy_0007/git",
-		"/home/ralph/Projects/MobyDock/deploy_0007/git/post-receive",
+		"/home/ralph/Projects/MobyDock/deploy_0003",
+		"/home/ralph/Projects/MobyDock/deploy_0005",
+		"/home/ralph/Projects/MobyDock/deploy_0005/git",
+		"/home/ralph/Projects/MobyDock/deploy_0005/git/post-receive",
+		"/home/ralph/Projects/MobyDock/deploy_0006",
+		"/home/ralph/Projects/MobyDock/deploy_0006/git",
+		"/home/ralph/Projects/MobyDock/deploy_0006/git/post-receive",
 		"/home/ralph/Projects/MobyDock/deploy_0008",
 		"/home/ralph/Projects/MobyDock/deploy_0008/git",
 		"/home/ralph/Projects/MobyDock/deploy_0008/git/post-receive",
+		"/home/ralph/Projects/MobyDock/deploy_0008/nginx",
+		"/home/ralph/Projects/MobyDock/deploy_0008/nginx/configs",
 		"/home/ralph/Projects/MobyDock/deploy_0008/units"
 	],
 	"file_history":
 	[
+		"/home/ralph/zzz_git_test/zzz_sub_git_test/git_01.sh",
 		"/home/ralph/Projects/MobyDock/deploy_0002/deploy.sh",
 		"/home/ralph/Projects/MobyDock/deploy_0003/deploy.sh",
 		"/home/ralph/Projects/MobyDock/deploy_0004/deploy.sh",
@@ -161,7 +191,7 @@
 	],
 	"find":
 	{
-		"height": 0.0
+		"height": 23.0
 	},
 	"find_in_files":
 	{
@@ -175,6 +205,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"echo"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -220,7 +251,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 9,
 					"type": "text"
 				},
 				{
@@ -248,7 +279,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 10,
 					"type": "text"
 				},
 				{
@@ -276,7 +307,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 8,
 					"type": "text"
 				},
 				{
@@ -304,7 +335,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 4,
+					"stack_index": 7,
 					"type": "text"
 				},
 				{
@@ -332,7 +363,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -357,10 +388,10 @@
 							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
 						},
 						"translation.x": 0.0,
-						"translation.y": 82.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -376,8 +407,68 @@
 						"selection":
 						[
 							[
-								735,
-								735
+								4216,
+								4216
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1402.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "deploy_0008/deploy.sh",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10789,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3721,
+								3721
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1545.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "deploy_0003/deploy.sh",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 6787,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								13,
+								13
 							]
 						],
 						"settings":
@@ -394,25 +485,53 @@
 					"type": "text"
 				},
 				{
-					"buffer": 7,
-					"file": "deploy_0008/deploy.sh",
+					"buffer": 9,
+					"file": "deploy_0008/nginx/docker-entrypoint",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 10709,
+						"buffer_size": 477,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								662,
-								662
+								246,
+								246
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax",
+							"syntax": "Packages/ShellScript/Shell-Unix-Generic.sublime-syntax"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "deploy_0008/nginx/configs/default.conf",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2986,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								646,
+								646
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage",
 							"tab_size": 2,
 							"translate_tabs_to_spaces": true
 						},
@@ -420,11 +539,11 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 8,
+					"buffer": 11,
 					"file": "deploy_0007/nginx/configs/default.conf",
 					"semi_transient": false,
 					"settings":
@@ -450,11 +569,11 @@
 						"translation.y": 435.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 8,
+					"stack_index": 11,
 					"type": "text"
 				},
 				{
-					"buffer": 9,
+					"buffer": 12,
 					"file": "mobydock/docker-compose.yml",
 					"semi_transient": false,
 					"settings":
@@ -480,7 +599,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 9,
+					"stack_index": 12,
 					"type": "text"
 				}
 			]
@@ -488,7 +607,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 0.0
+		"height": 23.0
 	},
 	"input":
 	{
@@ -525,7 +644,7 @@
 	"project": "aaa_sprj_mobydock_02.sublime-project",
 	"replace":
 	{
-		"height": 0.0
+		"height": 42.0
 	},
 	"save_all_on_build": true,
 	"select_file":
